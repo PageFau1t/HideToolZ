@@ -25,6 +25,8 @@ public:
 	virtual BOOL InitInstance();
 
 // Implementation
+public:
+	BOOL muteOnHide;
 
 	DECLARE_MESSAGE_MAP()
 };

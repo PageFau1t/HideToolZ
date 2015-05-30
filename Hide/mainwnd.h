@@ -9,6 +9,7 @@
 #include "afxwin.h"
 #include "../VolumeCtrl/VolumeCtrl.h"
 #pragma comment(lib,"../debug/VolumeCtrl.lib")
+#include "Settings.h"
 
 
 BOOL CALLBACK EnumWindowCallBack(HWND hWnd, LPARAM lParam);
@@ -38,16 +39,14 @@ protected:
 	HWND hiddenHWND[100];//已隐藏窗口句柄
 	int countHidden;//已隐藏窗口数
 	int hideState;//状态 1=隐藏 0=未隐藏
-
 	CListCtrl *m_list1, *m_list2;
-	//NOTIFYICONDATA m_nid;
+	CSettings *settingDlg;
 
 	BOOL PreTranslateMessage(MSG* pMsg);//屏蔽回车和ESC  
 	
 	BOOL GetProcessList();
 	void RefreshPID();
 	afx_msg LRESULT OnFindWindow(WPARAM wParam, LPARAM lParam);
-	//afx_msg LRESULT OnUmTraymsg(WPARAM wParam, LPARAM lParam);
 
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
@@ -55,11 +54,11 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedButton1();//显示所有已隐藏
-	afx_msg void OnBnClickedButton2();	//隐藏窗口
+	afx_msg void OnRestore();//显示所有已隐藏
+	afx_msg void OnHide();	//隐藏窗口
 	afx_msg void OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2);
 	afx_msg void OnAddProcess();
 	afx_msg void OnRemoveProcess();
 	afx_msg void OnRefresh();
-	afx_msg void OnClose();
+	afx_msg void OnBnClickedButton6();
 };

@@ -31,15 +31,14 @@ void mainwnd::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(mainwnd, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BUTTON1, &mainwnd::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON1, &mainwnd::OnRestore)
 	ON_MESSAGE(UM_MSG1, OnFindWindow)
-	ON_BN_CLICKED(IDC_BUTTON2, &mainwnd::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON2, &mainwnd::OnHide)
 	ON_WM_HOTKEY()
 	ON_BN_CLICKED(IDC_BUTTON3, &mainwnd::OnAddProcess)
 	ON_BN_CLICKED(IDC_BUTTON4, &mainwnd::OnRemoveProcess)
 	ON_BN_CLICKED(IDC_BUTTON5, &mainwnd::OnRefresh)
-	ON_WM_CLOSE()
-	//ON_MESSAGE(UM_TRAY, &mainwnd::OnUmTraymsg)
+	ON_BN_CLICKED(IDC_BUTTON6, &mainwnd::OnBnClickedButton6)
 END_MESSAGE_MAP()
 
 
@@ -55,6 +54,7 @@ BOOL mainwnd::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	theApp.muteOnHide = 1;
 	countHidden = 0;
 	hideState = 0;
 	countTgt = 1;
@@ -68,14 +68,6 @@ BOOL mainwnd::OnInitDialog()
 	m_list1->InsertColumn(1, L"PID", LVCFMT_LEFT, 50);
 	m_list2->InsertColumn(0, L"Process", LVCFMT_LEFT, 100);
 	m_list2->InsertColumn(1, L"PID", LVCFMT_LEFT, 50);
-
-	/*建立托盘图标*/
-	//m_nid.hWnd = GetSafeHwnd();
-	//m_nid.hIcon = m_hIcon;
-	//CString tooltip = _T("HideToolZ");
-	//_tcsncpy_s(m_nid.szTip, tooltip, tooltip.GetLength());
-	//m_nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
-	//Shell_NotifyIcon(NIM_ADD, &m_nid);
 
 	RegisterHotKey(GetSafeHwnd(), 49040, MOD_ALT, VK_F1);
 	GetProcessList();
@@ -161,6 +153,7 @@ BOOL mainwnd::GetProcessList()
 		m_list1->DeleteAllItems();
 		do
 		{
+			//取得进程名和PID
 			PID = pe32.th32ProcessID;
 			Name.Format(L"%s", pe32.szExeFile);
 
@@ -207,13 +200,15 @@ void mainwnd::RefreshPID()
 		countTgt = 1;
 		do
 		{
+			//取得进程名和PID
 			PID = pe32.th32ProcessID;
 			Name.Format(L"%s", pe32.szExeFile);
 
 			for (int i = 0; i < m_list2->GetItemCount(); i++)
 			{
-				if (Name == m_list2->GetItemText(i, 0))
+				if (Name == m_list2->GetItemText(i, 0))//若进程名在List2中
 				{
+					//保存PID
 					tgtPID[countTgt] = PID;
 					countTgt++;
 				}
@@ -254,7 +249,7 @@ LRESULT mainwnd::OnFindWindow(WPARAM wParam, LPARAM lParam)
 }
 
 
-void mainwnd::OnBnClickedButton1()
+void mainwnd::OnRestore()
 {
 	// TODO: Add your control notification handler code here
 	for (int i = 0; i < countHidden; i++)
@@ -264,11 +259,14 @@ void mainwnd::OnBnClickedButton1()
 	countHidden = 0;
 	hideState = 0;
 
-	volCtrl.SetMute(0);
+	if (theApp.muteOnHide)
+	{
+		volCtrl.SetMute(0);
+	}
 }
 
 
-void mainwnd::OnBnClickedButton2()
+void mainwnd::OnHide()
 {
 	// TODO: Add your control notification handler code here
 	RefreshPID();
@@ -278,7 +276,10 @@ void mainwnd::OnBnClickedButton2()
 	}
 	hideState = 1;
 
-	volCtrl.SetMute(1);
+	if (theApp.muteOnHide)
+	{
+		volCtrl.SetMute(1);
+	}	
 }
 
 
@@ -287,11 +288,11 @@ void mainwnd::OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2)
 	// TODO: Add your message handler code here and/or call default
 	if (hideState == 0)
 	{
-		OnBnClickedButton2();
+		OnHide();
 	}
 	else
 	{
-		OnBnClickedButton1();
+		OnRestore();
 	}
 
 	CDialogEx::OnHotKey(nHotKeyId, nKey1, nKey2);
@@ -332,60 +333,9 @@ void mainwnd::OnRefresh()
 }
 
 
-void mainwnd::OnClose()
+void mainwnd::OnBnClickedButton6()
 {
-	// TODO: Add your message handler code here and/or call default
-	ShowWindow(SW_HIDE);
-	
-	//是否销毁窗口
-	CDialogEx::OnClose();
+	// TODO: Add your control notification handler code here
+	settingDlg = new CSettings(this);
+	settingDlg->DoModal();
 }
-
-
-//托盘图标消息
-/*afx_msg LRESULT mainwnd::OnUmTraymsg(WPARAM wParam, LPARAM lParam)
-{
-	UINT uMsg = (UINT)lParam;
-	switch (uMsg)
-	{
-	case WM_RBUTTONUP:
-	{
-						 //右键处理
-						 CMenu menuTray;
-						 CPoint point;
-						 int id;
-						 GetCursorPos(&point);
-
-						 menuTray.LoadMenu(IDR_MENU_TRAY);
-						 id = menuTray.GetSubMenu(0)->TrackPopupMenu(TPM_RETURNCMD | TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
-#if 0
-						 CString strInfo;
-						 strInfo.Format(L"menuid %d", id);
-						 LPCTSTR strtmp;
-						 strtmp = strInfo.GetBuffer(0);
-						 MessageBox(strtmp, L"test");
-#endif
-						 switch (id){
-						 case IDR_TRAY_EXIT:
-							 OnOK();
-							 break;
-						 case IDR_TRAY_RESTORE:
-							 //窗口前端显示
-							 SetForegroundWindow();
-							 ShowWindow(SW_SHOWNORMAL);
-							 break;
-						 default:
-							 break;
-						 }
-						 break;
-	}
-	case WM_LBUTTONDBLCLK:
-		SetForegroundWindow();
-		ShowWindow(SW_SHOWNORMAL);
-		break;
-	default:
-		break;
-	}
-	return 0;
-}
-*/
