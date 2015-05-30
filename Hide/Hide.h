@@ -27,6 +27,8 @@ public:
 // Implementation
 public:
 	BOOL muteOnHide;
+	BOOL hkShift, hkCtrl, hkAlt, hkWin;
+	int hk;
 
 	DECLARE_MESSAGE_MAP()
 };

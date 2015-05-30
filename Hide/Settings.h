@@ -22,5 +22,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
-	afx_msg void OnBnClickedCheck1();
+	afx_msg void OnMuteOnHide();
+	afx_msg void OnApplyHotkey();
 };

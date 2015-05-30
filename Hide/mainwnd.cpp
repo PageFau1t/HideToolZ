@@ -55,9 +55,16 @@ BOOL mainwnd::OnInitDialog()
 
 	// TODO: Add extra initialization here
 	theApp.muteOnHide = 1;
+	theApp.hkShift = 0;
+	theApp.hkAlt = 1;
+	theApp.hkCtrl = 0;
+	theApp.hkWin = 0;
+	theApp.hk = VK_F1;
+
 	countHidden = 0;
 	hideState = 0;
 	countTgt = 1;
+	
 
 	//ÁÐ³õÊ¼»¯
 	m_list1 = (CListCtrl*)GetDlgItem(IDC_LIST1);
@@ -69,7 +76,17 @@ BOOL mainwnd::OnInitDialog()
 	m_list2->InsertColumn(0, L"Process", LVCFMT_LEFT, 100);
 	m_list2->InsertColumn(1, L"PID", LVCFMT_LEFT, 50);
 
-	RegisterHotKey(GetSafeHwnd(), 49040, MOD_ALT, VK_F1);
+	int bufMOD = 0;
+	if (theApp.hkShift)
+		bufMOD |= MOD_SHIFT;
+	if (theApp.hkAlt)
+		bufMOD |= MOD_ALT;
+	if (theApp.hkCtrl)
+		bufMOD |= MOD_CONTROL;
+	if (theApp.hkWin)
+		bufMOD |= MOD_WIN;
+	if (!RegisterHotKey(GetSafeHwnd(), 49040, bufMOD, theApp.hk))
+		MessageBox(L"Error: Failed to register Hotkey.");
 	GetProcessList();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
