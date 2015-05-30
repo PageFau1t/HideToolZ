@@ -118,7 +118,7 @@ BOOL CSettings::OnInitDialog()
 	default:
 		break;
 	}
-	((CComboBox*)GetDlgItem(IDC_COMBO2))->SetCurSel(buf);
+	((CComboBox*)GetDlgItem(IDC_COMBO))->SetCurSel(buf);
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -142,7 +142,7 @@ void CSettings::OnApplyHotkey()
 	theApp.hkWin = ((CButton*)GetDlgItem(IDC_CHECK5))->GetCheck();
 
 	int buf=0;
-	switch (((CComboBox*)GetDlgItem(IDC_COMBO2))->GetCurSel())
+	switch (((CComboBox*)GetDlgItem(IDC_COMBO))->GetCurSel())
 	{
 	case 0: buf = VK_F1; break;
 	case 1: buf = VK_F2; break;

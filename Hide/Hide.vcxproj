@@ -205,7 +205,9 @@
     <None Include="res\Hide.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\assassin-perk-2.ico" />
     <Image Include="res\Hide.ico" />
+    <Image Include="res\icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

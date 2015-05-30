@@ -20,7 +20,7 @@
 mainwnd::mainwnd(CWnd* pParent /*=NULL*/)
 : CDialogEx(mainwnd::IDD, pParent)
 {
-	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
 }
 
 void mainwnd::DoDataExchange(CDataExchange* pDX)
