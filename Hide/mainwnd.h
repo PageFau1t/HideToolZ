@@ -60,5 +60,5 @@ public:
 	afx_msg void OnAddProcess();
 	afx_msg void OnRemoveProcess();
 	afx_msg void OnRefresh();
-	afx_msg void OnBnClickedButton6();
+	afx_msg void OnSetting();
 };

@@ -38,7 +38,7 @@ BEGIN_MESSAGE_MAP(mainwnd, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &mainwnd::OnAddProcess)
 	ON_BN_CLICKED(IDC_BUTTON4, &mainwnd::OnRemoveProcess)
 	ON_BN_CLICKED(IDC_BUTTON5, &mainwnd::OnRefresh)
-	ON_BN_CLICKED(IDC_BUTTON6, &mainwnd::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON6, &mainwnd::OnSetting)
 END_MESSAGE_MAP()
 
 
@@ -55,6 +55,7 @@ BOOL mainwnd::OnInitDialog()
 
 	// TODO: Add extra initialization here
 	theApp.muteOnHide = 1;
+	theApp.moveCursor = 0;
 	theApp.hkShift = 0;
 	theApp.hkAlt = 1;
 	theApp.hkCtrl = 0;
@@ -63,8 +64,7 @@ BOOL mainwnd::OnInitDialog()
 
 	countHidden = 0;
 	hideState = 0;
-	countTgt = 1;
-	
+	countTgt = 1;	
 
 	//列初始化
 	m_list1 = (CListCtrl*)GetDlgItem(IDC_LIST1);
@@ -76,6 +76,7 @@ BOOL mainwnd::OnInitDialog()
 	m_list2->InsertColumn(0, L"Process", LVCFMT_LEFT, 100);
 	m_list2->InsertColumn(1, L"PID", LVCFMT_LEFT, 50);
 
+	//设定快捷键
 	int bufMOD = 0;
 	if (theApp.hkShift)
 		bufMOD |= MOD_SHIFT;
@@ -160,8 +161,6 @@ BOOL mainwnd::GetProcessList()
 	//  display information.
 	if (Process32First(hProcessSnap, &pe32))
 	{
-		DWORD         dwPriorityClass;
-		BOOL          bGotModule = FALSE;
 		MODULEENTRY32 me32 = { 0 };
 
 		DWORD PID;
@@ -208,8 +207,6 @@ void mainwnd::RefreshPID()
 
 	if (Process32First(hProcessSnap, &pe32))
 	{
-		DWORD         dwPriorityClass;
-		BOOL          bGotModule = FALSE;
 		MODULEENTRY32 me32 = { 0 };
 
 		DWORD PID;
@@ -277,9 +274,7 @@ void mainwnd::OnRestore()
 	hideState = 0;
 
 	if (theApp.muteOnHide)
-	{
 		volCtrl.SetMute(0);
-	}
 }
 
 
@@ -294,9 +289,9 @@ void mainwnd::OnHide()
 	hideState = 1;
 
 	if (theApp.muteOnHide)
-	{
 		volCtrl.SetMute(1);
-	}	
+	if (theApp.moveCursor)
+		SetCursorPos(1920, 1080);
 }
 
 
@@ -350,7 +345,7 @@ void mainwnd::OnRefresh()
 }
 
 
-void mainwnd::OnBnClickedButton6()
+void mainwnd::OnSetting()
 {
 	// TODO: Add your control notification handler code here
 	settingDlg = new CSettings(this);

@@ -28,8 +28,9 @@ void CSettings::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CSettings, CDialogEx)
-	ON_BN_CLICKED(IDC_CHECK1, &CSettings::OnMuteOnHide)
+	ON_BN_CLICKED(IDC_CHECK1, &CSettings::OnSetMuteOnHide)
 	ON_BN_CLICKED(IDC_BUTTON1, &CSettings::OnApplyHotkey)
+	ON_BN_CLICKED(IDC_CHECK6, &CSettings::OnSetMoveCursor)
 END_MESSAGE_MAP()
 
 
@@ -45,6 +46,10 @@ BOOL CSettings::OnInitDialog()
 		((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(1);
 	else
 		((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(0);
+	if (theApp.moveCursor)
+		((CButton*)GetDlgItem(IDC_CHECK6))->SetCheck(1);
+	else
+		((CButton*)GetDlgItem(IDC_CHECK6))->SetCheck(0);
 	if (theApp.hkShift)
 		((CButton*)GetDlgItem(IDC_CHECK2))->SetCheck(1);
 	else
@@ -125,7 +130,7 @@ BOOL CSettings::OnInitDialog()
 	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CSettings::OnMuteOnHide()
+void CSettings::OnSetMuteOnHide()
 {
 	// TODO: Add your control notification handler code here
 	theApp.muteOnHide = !theApp.muteOnHide;
@@ -135,7 +140,7 @@ void CSettings::OnMuteOnHide()
 void CSettings::OnApplyHotkey()
 {
 	// TODO: Add your control notification handler code here
-	theApp.muteOnHide=((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck();
+	theApp.muteOnHide = ((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck();
 	theApp.hkShift = ((CButton*)GetDlgItem(IDC_CHECK2))->GetCheck();
 	theApp.hkCtrl = ((CButton*)GetDlgItem(IDC_CHECK3))->GetCheck();;
 	theApp.hkAlt = ((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck();;
@@ -212,4 +217,11 @@ void CSettings::OnApplyHotkey()
 		MessageBox(L"Error: Failed to unregister previous Hotkey.");
 	if (!RegisterHotKey(GetParent()->GetSafeHwnd(), 49040, bufMOD, theApp.hk))
 		MessageBox(L"Error: Failed to register Hotkey.");
+}
+
+
+void CSettings::OnSetMoveCursor()
+{
+	// TODO: Add your control notification handler code here
+	theApp.moveCursor = !theApp.moveCursor;
 }
