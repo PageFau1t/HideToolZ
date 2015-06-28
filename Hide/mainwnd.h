@@ -10,6 +10,7 @@
 #include "../VolumeCtrl/VolumeCtrl.h"
 #pragma comment(lib,"../debug/VolumeCtrl.lib")
 #include "Settings.h"
+#include "BlackScreen.h"
 
 
 BOOL CALLBACK EnumWindowCallBack(HWND hWnd, LPARAM lParam);
@@ -41,6 +42,7 @@ protected:
 	int hideState;//×´Ì¬ 1=Òþ²Ø 0=Î´Òþ²Ø
 	CListCtrl *m_list1, *m_list2;
 	CSettings *settingDlg;
+	CBlackScreen *blackDlg;
 
 	BOOL PreTranslateMessage(MSG* pMsg);//ÆÁ±Î»Ø³µºÍESC  
 	

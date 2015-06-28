@@ -64,7 +64,12 @@ BOOL mainwnd::OnInitDialog()
 
 	countHidden = 0;
 	hideState = 0;
-	countTgt = 1;	
+	countTgt = 0;
+
+	settingDlg = new CSettings;
+	blackDlg = new CBlackScreen;
+	blackDlg->Create(IDD_DIALOG1,GetDesktopWindow());
+	blackDlg->SetWindowPos(0, 0, 0, 1920, 1080,0);
 
 	//列初始化
 	m_list1 = (CListCtrl*)GetDlgItem(IDC_LIST1);
@@ -89,7 +94,7 @@ BOOL mainwnd::OnInitDialog()
 	if (!RegisterHotKey(GetSafeHwnd(), 49040, bufMOD, theApp.hk))
 		MessageBox(L"Error: Failed to register Hotkey.");
 	GetProcessList();
-
+	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -173,10 +178,10 @@ BOOL mainwnd::GetProcessList()
 			PID = pe32.th32ProcessID;
 			Name.Format(L"%s", pe32.szExeFile);
 
-			if (Name == L"Hide.exe")
-			{
-				tgtPID[0] = PID;
-			}
+			//if (Name == L"Hide.exe")
+			//{
+			//	tgtPID[0] = PID;
+			//}
 			//加入List1
 			int row = m_list1->InsertItem(0, Name);
 			strPID.Format(L"%d", PID);
@@ -273,8 +278,12 @@ void mainwnd::OnRestore()
 	countHidden = 0;
 	hideState = 0;
 
+	ShowWindow(SW_SHOW);
+	settingDlg->ShowWindow(SW_SHOW);
 	if (theApp.muteOnHide)
 		volCtrl.SetMute(0);
+	if (theApp.moveCursor)
+		blackDlg->ShowWindow(SW_HIDE);
 }
 
 
@@ -288,10 +297,16 @@ void mainwnd::OnHide()
 	}
 	hideState = 1;
 
+	ShowWindow(SW_HIDE);
+	settingDlg->ShowWindow(SW_HIDE);
 	if (theApp.muteOnHide)
 		volCtrl.SetMute(1);
 	if (theApp.moveCursor)
+	{
 		SetCursorPos(1920, 1080);
+		blackDlg->ShowWindow(SW_SHOW);
+		blackDlg->SetForegroundWindow();
+	}
 }
 
 
@@ -347,7 +362,6 @@ void mainwnd::OnRefresh()
 
 void mainwnd::OnSetting()
 {
-	// TODO: Add your control notification handler code here
-	settingDlg = new CSettings(this);
+	// TODO: Add your control notification handler code here	
 	settingDlg->DoModal();
 }
