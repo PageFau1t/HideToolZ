@@ -30,7 +30,7 @@ void CSettings::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CSettings, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK1, &CSettings::OnSetMuteOnHide)
 	ON_BN_CLICKED(IDC_BUTTON1, &CSettings::OnApplyHotkey)
-	ON_BN_CLICKED(IDC_CHECK6, &CSettings::OnSetMoveCursor)
+	ON_BN_CLICKED(IDC_CHECK6, &CSettings::OnSetBlackScreen)
 END_MESSAGE_MAP()
 
 
@@ -46,7 +46,7 @@ BOOL CSettings::OnInitDialog()
 		((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(1);
 	else
 		((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(0);
-	if (theApp.moveCursor)
+	if (theApp.blackScreen)
 		((CButton*)GetDlgItem(IDC_CHECK6))->SetCheck(1);
 	else
 		((CButton*)GetDlgItem(IDC_CHECK6))->SetCheck(0);
@@ -220,8 +220,8 @@ void CSettings::OnApplyHotkey()
 }
 
 
-void CSettings::OnSetMoveCursor()
+void CSettings::OnSetBlackScreen()
 {
 	// TODO: Add your control notification handler code here
-	theApp.moveCursor = !theApp.moveCursor;
+	theApp.blackScreen = !theApp.blackScreen;
 }
