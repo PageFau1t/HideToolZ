@@ -1,5 +1,6 @@
 #pragma once
-
+#include "../libVolumCtrl/libVolumCtrl.h"
+#pragma comment(lib,"../debug/libVolumCtrl.lib")
 
 // CBlackScreen dialog
 
