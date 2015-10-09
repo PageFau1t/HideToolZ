@@ -27,7 +27,7 @@ public:
 // Implementation
 public:
 	BOOL muteOnHide;
-	BOOL blackScreen;
+	BOOL moveCursor;
 	BOOL hkShift, hkCtrl, hkAlt, hkWin;
 	int hk;
 
