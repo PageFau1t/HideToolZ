@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hide", "Hide\Hide.vcxproj", "{8FD0E27D-83FB-4034-9401-D0FD4482BDBE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libVolumCtrl", "libVolumCtrl\libVolumCtrl.vcxproj", "{EEB2E188-B9FF-41B4-AF1F-D09BA38C3714}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VolumeCtrl", "VolumeCtrl\VolumeCtrl.vcxproj", "{430629EE-BEFF-4967-85C1-854CB0378B6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +23,14 @@ Global
 		{8FD0E27D-83FB-4034-9401-D0FD4482BDBE}.Release|Win32.Build.0 = Release|Win32
 		{8FD0E27D-83FB-4034-9401-D0FD4482BDBE}.Release|x64.ActiveCfg = Release|x64
 		{8FD0E27D-83FB-4034-9401-D0FD4482BDBE}.Release|x64.Build.0 = Release|x64
-		{EEB2E188-B9FF-41B4-AF1F-D09BA38C3714}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EEB2E188-B9FF-41B4-AF1F-D09BA38C3714}.Debug|Win32.Build.0 = Debug|Win32
-		{EEB2E188-B9FF-41B4-AF1F-D09BA38C3714}.Debug|x64.ActiveCfg = Debug|Win32
-		{EEB2E188-B9FF-41B4-AF1F-D09BA38C3714}.Release|Win32.ActiveCfg = Release|Win32
-		{EEB2E188-B9FF-41B4-AF1F-D09BA38C3714}.Release|Win32.Build.0 = Release|Win32
-		{EEB2E188-B9FF-41B4-AF1F-D09BA38C3714}.Release|x64.ActiveCfg = Release|Win32
+		{430629EE-BEFF-4967-85C1-854CB0378B6D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{430629EE-BEFF-4967-85C1-854CB0378B6D}.Debug|Win32.Build.0 = Debug|Win32
+		{430629EE-BEFF-4967-85C1-854CB0378B6D}.Debug|x64.ActiveCfg = Debug|x64
+		{430629EE-BEFF-4967-85C1-854CB0378B6D}.Debug|x64.Build.0 = Debug|x64
+		{430629EE-BEFF-4967-85C1-854CB0378B6D}.Release|Win32.ActiveCfg = Release|Win32
+		{430629EE-BEFF-4967-85C1-854CB0378B6D}.Release|Win32.Build.0 = Release|Win32
+		{430629EE-BEFF-4967-85C1-854CB0378B6D}.Release|x64.ActiveCfg = Release|x64
+		{430629EE-BEFF-4967-85C1-854CB0378B6D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
