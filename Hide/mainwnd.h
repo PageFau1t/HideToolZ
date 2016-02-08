@@ -8,7 +8,7 @@
 #include <atlstr.h>  
 #include "afxwin.h"
 #include "../VolumeCtrl/VolumeCtrl.h"
-#pragma comment(lib,"../debug/VolumeCtrl.lib")
+#pragma comment(lib,"../Release/VolumeCtrl.lib")
 #include "Settings.h"
 #include "BlackScreen.h"
 
