@@ -22,5 +22,5 @@ public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSetMuteOnHide();
 	afx_msg void OnApplyHotkey();
-	afx_msg void OnSetMoveCursor();
+	afx_msg void OnSetBlackScreen();
 };

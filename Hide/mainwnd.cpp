@@ -55,7 +55,7 @@ BOOL mainwnd::OnInitDialog()
 
 	// TODO: Add extra initialization here
 	theApp.muteOnHide = 1;
-	theApp.moveCursor = 0;
+	theApp.blackScreen = 0;
 	theApp.hkShift = 0;
 	theApp.hkAlt = 1;
 	theApp.hkCtrl = 0;
@@ -68,7 +68,7 @@ BOOL mainwnd::OnInitDialog()
 
 	settingDlg = new CSettings;
 	blackDlg = new CBlackScreen;
-	blackDlg->Create(IDD_DIALOG1,GetDesktopWindow());
+	blackDlg->Create(IDD_BLACK,GetDesktopWindow());
 	blackDlg->SetWindowPos(0, 0, 0, 1920, 1080,0);
 
 	//ÁÐ³õÊ¼»¯
@@ -282,7 +282,7 @@ void mainwnd::OnRestore()
 	settingDlg->ShowWindow(SW_SHOW);
 	if (theApp.muteOnHide)
 		volCtrl.SetMute(0);
-	if (theApp.moveCursor)
+	if (theApp.blackScreen)
 		blackDlg->ShowWindow(SW_HIDE);
 }
 
@@ -301,7 +301,7 @@ void mainwnd::OnHide()
 	settingDlg->ShowWindow(SW_HIDE);
 	if (theApp.muteOnHide)
 		volCtrl.SetMute(1);
-	if (theApp.moveCursor)
+	if (theApp.blackScreen)
 	{
 		SetCursorPos(1920, 1080);
 		blackDlg->ShowWindow(SW_SHOW);
