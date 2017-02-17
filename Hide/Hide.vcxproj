@@ -190,6 +190,7 @@
     <ClInclude Include="Settings.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="VolumeCtrl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlackScreen.cpp" />
@@ -202,6 +203,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="VolumeCtrl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Hide.rc" />

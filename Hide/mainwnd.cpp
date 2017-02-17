@@ -68,8 +68,8 @@ BOOL mainwnd::OnInitDialog()
 
 	settingDlg = new CSettings;
 	blackDlg = new CBlackScreen;
-	blackDlg->Create(IDD_BLACK,GetDesktopWindow());
-	blackDlg->SetWindowPos(0, 0, 0, 1920, 1080,0);
+	blackDlg->Create(IDD_BLACK, GetDesktopWindow());
+	blackDlg->SetWindowPos(0, 0, 0, 1920, 1080, 0);
 
 	//列初始化
 	m_list1 = (CListCtrl*)GetDlgItem(IDC_LIST1);
@@ -94,7 +94,7 @@ BOOL mainwnd::OnInitDialog()
 	if (!RegisterHotKey(GetSafeHwnd(), 49040, bufMOD, theApp.hk))
 		MessageBox(L"Error: Failed to register Hotkey.");
 	GetProcessList();
-	
+
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -178,11 +178,6 @@ BOOL mainwnd::GetProcessList()
 			PID = pe32.th32ProcessID;
 			Name.Format(L"%s", pe32.szExeFile);
 
-			//if (Name == L"Hide.exe")
-			//{
-			//	tgtPID[0] = PID;
-			//}
-			//加入List1
 			int row = m_list1->InsertItem(0, Name);
 			strPID.Format(L"%d", PID);
 			m_list1->SetItemText(row, 1, strPID);
@@ -259,9 +254,7 @@ LRESULT mainwnd::OnFindWindow(WPARAM wParam, LPARAM lParam)
 	if (::IsWindowVisible(hWnd))//判断是否显性窗口
 	{
 		::ShowWindow(hWnd, SW_HIDE);
-		hiddenHWND[countHidden] = hWnd;
-		countHidden++;
-
+		hiddenHWND[countHidden++] = hWnd;
 	}
 
 	return S_OK;
@@ -272,16 +265,16 @@ void mainwnd::OnRestore()
 {
 	// TODO: Add your control notification handler code here
 	for (int i = 0; i < countHidden; i++)
-	{
 		::ShowWindow(hiddenHWND[i], SW_SHOW);
-	}
+	if (theApp.muteOnHide)
+	for (int i = 0; i < countTgt; i++)
+		volCtrl.SetSessionMute(tgtPID[i], 0); //Unmute AudioSession by PID
+
 	countHidden = 0;
 	hideState = 0;
 
 	ShowWindow(SW_SHOW);
 	settingDlg->ShowWindow(SW_SHOW);
-	if (theApp.muteOnHide)
-		volCtrl.SetMute(0);
 	if (theApp.blackScreen)
 		blackDlg->ShowWindow(SW_HIDE);
 }
@@ -293,17 +286,19 @@ void mainwnd::OnHide()
 	RefreshPID();
 	for (int i = 0; i < countTgt; i++)
 	{
-		EnumWindows(EnumWindowCallBack, tgtPID[i]);
+		EnumWindows(EnumWindowCallBack, tgtPID[i]); //hide window by PID
+		if (theApp.muteOnHide)
+			volCtrl.SetSessionMute(tgtPID[i], 1); //mute AudioSession by PID
 	}
 	hideState = 1;
 
 	ShowWindow(SW_HIDE);
 	settingDlg->ShowWindow(SW_HIDE);
-	if (theApp.muteOnHide)
-		volCtrl.SetMute(1);
 	if (theApp.blackScreen)
 	{
-		SetCursorPos(1920, 1080);
+		RECT rect;
+		::GetWindowRect(::GetDesktopWindow(), &rect);
+		SetCursorPos(rect.right, rect.bottom);
 		blackDlg->ShowWindow(SW_SHOW);
 		blackDlg->SetForegroundWindow();
 	}

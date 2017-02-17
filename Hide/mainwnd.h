@@ -7,8 +7,9 @@
 #include <locale.h> 
 #include <atlstr.h>  
 #include "afxwin.h"
-#include "../VolumeCtrl/VolumeCtrl.h"
-#pragma comment(lib,"../Release/VolumeCtrl.lib")
+//#include "../VolumeCtrl/VolumeCtrl.h"
+//#pragma comment(lib,"../Release/VolumeCtrl.lib")
+#include "VolumeCtrl.h"
 #include "Settings.h"
 #include "BlackScreen.h"
 
@@ -34,7 +35,7 @@ protected:
 protected:
 	HICON m_hIcon;
 
-	CVolumeCtrl volCtrl;
+	VolumeCtrl volCtrl;
 	int tgtPID[32];//目标队列
 	int countTgt;
 	HWND hiddenHWND[100];//已隐藏窗口句柄

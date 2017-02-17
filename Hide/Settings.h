@@ -1,7 +1,4 @@
 #pragma once
-#include "../VolumeCtrl/VolumeCtrl.h"
-#pragma comment(lib,"../Release/VolumeCtrl.lib")
-
 
 // CSettings dialog
 
