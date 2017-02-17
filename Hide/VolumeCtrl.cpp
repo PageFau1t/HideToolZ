@@ -102,8 +102,11 @@ int VolumeCtrl::SetSessionMute(int PID, BOOL bMute)
 		{
 			sessionCtrl->QueryInterface(__uuidof(ISimpleAudioVolume), (void**)&m_pAudioVolume);
 			m_pAudioVolume->SetMute(bMute, &m_guidMyContext);
-		}		
+			SAFE_RELEASE(m_pAudioVolume);
+		}
+		SAFE_RELEASE(sessionCtrl);
 	}
+	SAFE_RELEASE(sessionEnumerator);
 
 	return 0;
 }
