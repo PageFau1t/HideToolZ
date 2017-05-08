@@ -324,7 +324,7 @@ void mainwnd::OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2)
 void mainwnd::OnAddProcess()
 {
 	// TODO: Add your control notification handler code here
-	for (int i = 0; i < m_list1->GetItemCount(); i++)
+	for (int i = m_list1->GetItemCount() - 1; i >=0 ; --i)
 	{
 		if (m_list1->GetItemState(i, LVIS_SELECTED) == LVIS_SELECTED)
 		{

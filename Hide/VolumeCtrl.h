@@ -20,13 +20,14 @@ public:
 	int SetSessionMute(int PID,BOOL bMute);
 
 protected:
-	BOOL InitEndPoint();
-	BOOL UninitEndPoint();	
+	BOOL InitCOM();
+	BOOL UninitCOM();
+	void InitController(); //获取默认输出设备、终结点、session管理
+	void ReleaseController();
 
-	IMMDeviceEnumerator *m_pEnumerator;
-	IMMDevice *m_pSpeaker;
-	IAudioEndpointVolume *m_pEndptVolCtrl;
-	IAudioSessionManager2 *m_pSessionManager;
-	ISimpleAudioVolume *m_pAudioVolume;
-	GUID m_guidMyContext;	
+	IMMDeviceEnumerator *m_pEnumerator; //枚举音频设备
+	IMMDevice *m_pSpeaker; 
+	IAudioEndpointVolume *m_pEndptVolCtrl; //音频终结点
+	IAudioSessionManager2 *m_pSessionManager; //音频session管理	
+	GUID m_guidMyContext; //GUID? 不知何用
 };

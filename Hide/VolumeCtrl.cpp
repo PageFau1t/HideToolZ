@@ -7,15 +7,15 @@ m_pEnumerator(NULL),
 m_pSpeaker(NULL),
 m_guidMyContext(GUID_NULL)
 {
-	InitEndPoint();
+	InitCOM();
 }
 
 VolumeCtrl::~VolumeCtrl(void)
 {
-	UninitEndPoint();
+	UninitCOM();
 }
 
-BOOL VolumeCtrl::InitEndPoint()
+BOOL VolumeCtrl::InitCOM()
 {
 	CoInitialize(NULL);
 	CoCreateGuid(&m_guidMyContext);   //=========================???
@@ -24,27 +24,41 @@ BOOL VolumeCtrl::InitEndPoint()
 	CoCreateInstance(__uuidof(MMDeviceEnumerator),	NULL, CLSCTX_INPROC_SERVER,
 		__uuidof(IMMDeviceEnumerator),	(void**)&m_pEnumerator);
 
-	// Get default audio-rendering device.
-	m_pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &m_pSpeaker);
-
-	// get endpoint(for speaker volume) and sessionmanager2(session volume)
-	m_pSpeaker->Activate(__uuidof(IAudioEndpointVolume),CLSCTX_ALL, NULL, (void**)&m_pEndptVolCtrl);
-	m_pSpeaker->Activate(__uuidof(IAudioSessionManager2), CLSCTX_ALL, NULL, (void**)&m_pSessionManager);
 	return TRUE;
 }
 
-BOOL VolumeCtrl::UninitEndPoint()
+
+BOOL VolumeCtrl::UninitCOM()
 {
 	SAFE_RELEASE(m_pEnumerator);
-	SAFE_RELEASE(m_pSpeaker);
-	SAFE_RELEASE(m_pEndptVolCtrl);
-	SAFE_RELEASE(m_pSessionManager);
+	//SAFE_RELEASE(m_pSpeaker);
+	//SAFE_RELEASE(m_pEndptVolCtrl);
+	//SAFE_RELEASE(m_pSessionManager);
 	CoUninitialize();
 	return TRUE;
 }
 
+
+void VolumeCtrl::InitController()
+{
+	// Get default audio-rendering device.
+	m_pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &m_pSpeaker);
+
+	// get endpoint(for speaker volume) and sessionmanager2(session volume)
+	m_pSpeaker->Activate(__uuidof(IAudioEndpointVolume), CLSCTX_ALL, NULL, (void**)&m_pEndptVolCtrl);
+	m_pSpeaker->Activate(__uuidof(IAudioSessionManager2), CLSCTX_ALL, NULL, (void**)&m_pSessionManager);
+}
+
+void VolumeCtrl::ReleaseController()
+{
+	SAFE_RELEASE(m_pSpeaker);
+	SAFE_RELEASE(m_pEndptVolCtrl);
+	SAFE_RELEASE(m_pSessionManager);
+}
+
 int VolumeCtrl::GetVolume()
 {
+	InitController();
 	float fVolume;
 	int iVolume;
 	if (m_pEndptVolCtrl)
@@ -52,19 +66,26 @@ int VolumeCtrl::GetVolume()
 		m_pEndptVolCtrl->GetMasterVolumeLevelScalar(&fVolume);
 		iVolume = (int)(MAX_VOL * fVolume + 0.5);
 	}
+
+	ReleaseController();
 	return iVolume;
 }
 
 BOOL VolumeCtrl::GetMute()
 {
+	InitController();
 	BOOL bMute = FALSE;
 	if (m_pEndptVolCtrl)
 		m_pEndptVolCtrl->GetMute(&bMute);
+
+	ReleaseController();
 	return bMute;
 }
 
+
 BOOL VolumeCtrl::SetVolume(int nVol)
 {
+	InitController();
 	if (nVol < 0)
 		nVol = 0;
 	if (nVol > MAX_VOL)
@@ -74,18 +95,24 @@ BOOL VolumeCtrl::SetVolume(int nVol)
 		HRESULT hr = m_pEndptVolCtrl->SetMasterVolumeLevelScalar((float)nVol / MAX_VOL, &m_guidMyContext);
 		return SUCCEEDED(hr) ? TRUE : FALSE;
 	}
+
+	ReleaseController();
 	return FALSE;
 }
 
 BOOL VolumeCtrl::SetMute(BOOL bMute)
 {
+	InitController();
 	if (m_pEndptVolCtrl)
 		m_pEndptVolCtrl->SetMute(bMute, &m_guidMyContext);
+
+	ReleaseController();
 	return TRUE;
 }
 
 int VolumeCtrl::SetSessionMute(int PID, BOOL bMute)
 {
+	InitController();
 	// enumerate sessions on this device
 	IAudioSessionEnumerator *sessionEnumerator;
 	m_pSessionManager->GetSessionEnumerator(&sessionEnumerator);
@@ -98,15 +125,16 @@ int VolumeCtrl::SetSessionMute(int PID, BOOL bMute)
 		sessionEnumerator->GetSession(i, (IAudioSessionControl**)&sessionCtrl);
 		DWORD processID;
 		sessionCtrl->GetProcessId(&processID);
-		if (PID==processID)
+		if (PID==processID) //session属于目标进程
 		{
-			sessionCtrl->QueryInterface(__uuidof(ISimpleAudioVolume), (void**)&m_pAudioVolume);
-			m_pAudioVolume->SetMute(bMute, &m_guidMyContext);
-			SAFE_RELEASE(m_pAudioVolume);
+			ISimpleAudioVolume *pAudioVolume;
+			sessionCtrl->QueryInterface(__uuidof(ISimpleAudioVolume), (void**)&pAudioVolume);
+			pAudioVolume->SetMute(bMute, &m_guidMyContext);
+			SAFE_RELEASE(pAudioVolume);
 		}
 		SAFE_RELEASE(sessionCtrl);
 	}
 	SAFE_RELEASE(sessionEnumerator);
-
+	ReleaseController();
 	return 0;
 }
